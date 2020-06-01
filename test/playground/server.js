@@ -28,7 +28,7 @@ function prepareUrl (url) {
 exports.start = sslOptions => {
     const app       = express();
     const appServer = http.createServer(app);
-    const proxy     = new Proxy('localhost', PROXY_PORT_1, PROXY_PORT_2, {
+    const proxy     = new Proxy('/', PROXY_PORT_1, PROXY_PORT_2, {
         ssl:             sslOptions,
         developmentMode: true
     });
