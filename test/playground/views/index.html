@@ -7,8 +7,10 @@
 <form action="index" method="POST">
     <div style="text-align: center; margin-top: 300px;">
         <input type="text" name="url" style="width: 500px;">
+        <input type="hidden" name="currentURL" id="current">
         <input type="submit" name="submit" value="Proxy!">
     </div>
 </form>
+<script>document.getElementById("current").value = document.domain;
 </body>
 </html>
