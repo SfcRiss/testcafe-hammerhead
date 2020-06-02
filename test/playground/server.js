@@ -10,6 +10,7 @@ const PROXY_PORT_1 = 1401;
 const PROXY_PORT_2 = 1402;
 const SERVER_PORT  = 1400;
 
+const proxy = null;
 
 function prepareUrl (url) {
     if (!/^(?:file|https?):\/\//.test(url)) {
@@ -40,14 +41,14 @@ exports.start = sslOptions => {
         let url = req.body.url;
         let currentURL = req.body.currentURL;
         
-        if (proxy) {
-            return;
-        } else {
-            const proxy = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
+        if (proxy === null) { 
+            proxy = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
                 ssl:             sslOptions,
                 developmentMode: true
             });   
             console.log(currentURL);
+        } else {
+            return;
         }
    
 
