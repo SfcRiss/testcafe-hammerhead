@@ -40,10 +40,16 @@ exports.start = sslOptions => {
         let url = req.body.url;
         let currentURL = req.body.currentURL;
         
-        const proxy     = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
-            ssl:             sslOptions,
-            developmentMode: true
-        });      
+        if (proxy) {
+            return;
+        } else {
+            const proxy = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
+                ssl:             sslOptions,
+                developmentMode: true
+            });   
+            console.log(currentURL);
+        }
+   
 
         if (!url) {
             res
@@ -61,4 +67,5 @@ exports.start = sslOptions => {
 
     appServer.listen(SERVER_PORT);
     console.log('Server listens on port ' + SERVER_PORT);
+    process.exec('start http://localhost:' + SERVER_PORT);
 };
