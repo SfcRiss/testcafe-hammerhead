@@ -10,8 +10,6 @@ const PROXY_PORT_1 = 1401;
 const PROXY_PORT_2 = 1402;
 const SERVER_PORT  = 1400;
 
-var proxy = null;
-
 function prepareUrl (url) {
     if (!/^(?:file|https?):\/\//.test(url)) {
         const matches = url.match(/^([A-Za-z]:)?(\/|\\)/);
@@ -30,6 +28,10 @@ function prepareUrl (url) {
 exports.start = sslOptions => {
     const app       = express();
     const appServer = http.createServer(app);
+    const proxy     = new Proxy('limeserver.asteroidwave.me', PROXY_PORT_1, PROXY_PORT_2, {
+        ssl:             sslOptions,
+        developmentMode: true
+    });
 
     app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -39,18 +41,6 @@ exports.start = sslOptions => {
 
     app.post('*', (req, res) => {
         let url = req.body.url;
-        let currentURL = req.body.currentURL;
-        
-        if (proxy === null) { 
-            proxy = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
-                ssl:             sslOptions,
-                developmentMode: true
-            });   
-            console.log(currentURL);
-        } else {
-            return;
-        }
-   
 
         if (!url) {
             res
@@ -59,6 +49,7 @@ exports.start = sslOptions => {
         }
         else {
             url = prepareUrl(url);
+
             res
                 .status(301)
                 .set('location', proxy.openSession(url, createSession()))
