@@ -40,16 +40,10 @@ exports.start = sslOptions => {
         let url = req.body.url;
         let currentURL = req.body.currentURL;
         
-        try {
-            const proxy     = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
-                ssl:             sslOptions,
-                developmentMode: true
-            });      
-        } catch (error) {
-            console.warn(error)
-        } // where is the unique id generarion stuff? nvm i found it 
-
-
+        const proxy     = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
+            ssl:             sslOptions,
+            developmentMode: true
+        });      
 
         if (!url) {
             res
