@@ -10,7 +10,6 @@ const PROXY_PORT_1 = 1401;
 const PROXY_PORT_2 = 1402;
 const SERVER_PORT  = 1400;
 
-var currentURL;
 
 function prepareUrl (url) {
     if (!/^(?:file|https?):\/\//.test(url)) {
@@ -41,10 +40,16 @@ exports.start = sslOptions => {
         let url = req.body.url;
         let currentURL = req.body.currentURL;
         
-        const proxy     = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
-            ssl:             sslOptions,
-            developmentMode: true
-        });
+        try {
+            const proxy     = new Proxy(currentURL, PROXY_PORT_1, PROXY_PORT_2, {
+                ssl:             sslOptions,
+                developmentMode: true
+            });      
+        } catch (error) {
+            console.warn(error)
+        } // where is the unique id generarion stuff? nvm i found it 
+
+
 
         if (!url) {
             res
@@ -53,7 +58,6 @@ exports.start = sslOptions => {
         }
         else {
             url = prepareUrl(url);
-
             res
                 .status(301)
                 .set('location', proxy.openSession(url, createSession()))
@@ -63,5 +67,4 @@ exports.start = sslOptions => {
 
     appServer.listen(SERVER_PORT);
     console.log('Server listens on port ' + SERVER_PORT);
-    process.exec('start http://localhost:' + SERVER_PORT);
 };
