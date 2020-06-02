@@ -10,7 +10,7 @@ const PROXY_PORT_1 = 1401;
 const PROXY_PORT_2 = 1402;
 const SERVER_PORT  = 1400;
 
-const proxy = null;
+var proxy = null;
 
 function prepareUrl (url) {
     if (!/^(?:file|https?):\/\//.test(url)) {
